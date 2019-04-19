@@ -1,5 +1,5 @@
 # Year 2048
-*based on digitstorm's Phaser3-typescript project*
+*based on digitsensitive's Phaser3-typescript project*
 *https://github.com/digitsensitive/phaser3-typescript*
 
 ## Getting started
