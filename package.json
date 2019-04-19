@@ -1,0 +1,46 @@
+{
+  "name": "year2048",
+  "version": "0.1",
+  "description": "A 2048 game with RPG Twist. Framework based on digitstorm's Phaser3-typescript project. ttps://github.com/digitsensitive/phaser3-typescript",
+  "keywords": [
+    "Phaser",
+    "Phaser 3",
+    "Phaser3",
+    "Html5-game",
+    "Phaser-boilerplate",
+    "TypeScript",
+    "Webpack",
+    "Phaser-game",
+    "Phaser-framework",
+    "2048",
+    "RPG"
+  ],
+  "devDependencies": {
+    "expose-loader": "0.7.5",
+    "ts-loader": "5.3.3",
+    "typescript": "3.3.3",
+    "webpack": "4.29.4",
+    "webpack-cli": "3.2.3",
+    "webpack-dev-server": "3.1.14"
+  },
+  "dependencies": {
+    "phaser": "3.16.2"
+  },
+  "scripts": {
+    "dev": "webpack --mode development && webpack-dev-server --mode development",
+    "build": "webpack --mode production && webpack-dev-server --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cokpsz/year2048.git"
+  },
+  "author": {
+    "name": "cokpsz",
+    "email": "cokpsz@gmail.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cokpsz/year2048/issues"
+  },
+  "homepage": "https://github.com/cokpsz/year2048#readme"
+}
