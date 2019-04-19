@@ -1,7 +1,7 @@
 {
-  "name": "year2048",
-  "version": "0.1",
-  "description": "A 2048 game with RPG Twist. Framework based on digitstorm's Phaser3-typescript project. ttps://github.com/digitsensitive/phaser3-typescript",
+  "name": "phaser3-typescript",
+  "version": "1.2.4",
+  "description": "Boilerplate, Game Examples, Cheat Sheets and Tutorials for Phaser 3 in TypeScript",
   "keywords": [
     "Phaser",
     "Phaser 3",
@@ -10,10 +10,12 @@
     "Phaser-boilerplate",
     "TypeScript",
     "Webpack",
+    "Tutorials",
+    "Phaser-tutorial",
+    "Game Examples",
     "Phaser-game",
     "Phaser-framework",
-    "2048",
-    "RPG"
+    "Phaser3-example"
   ],
   "devDependencies": {
     "expose-loader": "0.7.5",
@@ -32,15 +34,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cokpsz/year2048.git"
+    "url": "git+https://github.com/digitsensitive/phaser3-typescript.git"
   },
   "author": {
-    "name": "cokpsz",
-    "email": "cokpsz@gmail.com"
+    "name": "digitsensitive",
+    "email": "digit.sensitivee@gmail.com"
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cokpsz/year2048/issues"
+    "url": "https://github.com/digitsensitive/phaser3-typescript/issues"
   },
-  "homepage": "https://github.com/cokpsz/year2048#readme"
+  "homepage": "https://github.com/digitsensitive/phaser3-typescript#readme"
 }
