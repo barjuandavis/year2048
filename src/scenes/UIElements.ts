@@ -18,6 +18,10 @@ export class UIElements extends Phaser.Scene {
         });
     }
 
+    init() {
+        this.gameObj = <GameScene> this.scene.get("GameScene");
+    }
+
     preload ()
     {
        this.load.image('load',"./src/assets/ui/load_button/0.png");
@@ -35,7 +39,7 @@ export class UIElements extends Phaser.Scene {
             2. Show button places
             3. 
         */
-        this.gameObj = <GameScene> this.scene.get("GameScene");
+        
         this.loadButton = this.add.image(1024/2,1920-300,'load').setScale(2);
         this.shopButton = this.add.image(1024/2,1920-100,'shop').setScale(2);
         this.bossPlaceHolder = this.add.text(315,330,
@@ -61,4 +65,5 @@ export class UIElements extends Phaser.Scene {
             this.updateHealthBar();
         }
     }
+
 }

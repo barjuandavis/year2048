@@ -23,11 +23,17 @@ export class Grid {
     private size: integer;
     private tiles: Tile[][] = [[]];
 
-    constructor(size: integer) {
+
+    constructor();
+    constructor(size: integer);
+    constructor(size?: integer) {
+        if (size === undefined) size = 4;
         this.setSize(size);
         this.createTiles();
         this.addRandomTile(2); // first random tile
     }
+
+
 
     setSize(size: integer) {this.size = size;}
     getSize() {return this.size;}
@@ -159,6 +165,10 @@ export class Grid {
         }
         
         return {isValid, sum};
+    }
+
+    getTiles():Tile[][] {
+        return this.tiles;
     }
 
     print() {

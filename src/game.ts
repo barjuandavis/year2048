@@ -4,6 +4,8 @@ import "phaser";
 import { UIElements } from "./scenes/UIElements";
 import { GameScene } from "./scenes/GameScene";
 import { GameObserver } from "./controller/GameObserver";
+import { InputManager } from "./controller/InputManager";
+import { GridScene } from "./scenes/GridScene";
 
 
 const config: GameConfig = {
@@ -11,10 +13,14 @@ const config: GameConfig = {
     width: 1024,
     height: 1920,
     parent: 'game',
-    scene: [ GameScene, UIElements, GameObserver ],
+    scene: [ GameScene, UIElements, InputManager, GameObserver, GridScene ],
     input: {
         keyboard: true
       },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    }
 };
 
 
