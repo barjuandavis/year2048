@@ -17,11 +17,7 @@ export class GridScene extends Phaser.Scene {
     private mainGrid_y = 1250;
     private mainGrid_size = 500;
     private cells_size = this.mainGrid_size/4;
-    
-     
-    
-
-
+         
     constructor() {
         super({
             key:"GridScene",
@@ -29,15 +25,12 @@ export class GridScene extends Phaser.Scene {
         });
     }
 
-    
     init() {
         this.grid = new Grid(this.SIZE);
     }
 
     preload() {
         this.input_manager = <InputManager> this.scene.get("InputManager");
-
-
     }    
 
     create() {  
@@ -56,35 +49,27 @@ export class GridScene extends Phaser.Scene {
         console.log(this.input_ee.eventNames());
         this.generateGrid();
     }
-    
-    update() {
-
-
-    }
-
 
     onUpPressed() {
         console.log("up");
-        this.grid.moveTiles(0);
+        this.grid.moveTiles(3);
         this.updateGrid();
     }
     onDownPressed() {
         console.log("down");
-        this.grid.moveTiles(2);
+        this.grid.moveTiles(1);
         this.updateGrid();
     }
     onLeftPressed() {
         console.log("left");
-        this.grid.moveTiles(3);
+        this.grid.moveTiles(0);
         this.updateGrid();
     }
     onRightPressed() {
         console.log("right");
-        this.grid.moveTiles(1);
+        this.grid.moveTiles(2);
         this.updateGrid();
     }
-
-
 
     getColorByValue(val:number) {
         var s;
@@ -122,8 +107,6 @@ export class GridScene extends Phaser.Scene {
                 }
             }
         }
-
-
     }
 
     generateGrid() {
@@ -153,7 +136,6 @@ export class GridScene extends Phaser.Scene {
     }
 
 }
-
 
 export namespace GridScene {
     export enum COLORS_BACKGROUND {
