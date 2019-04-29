@@ -47,7 +47,6 @@ export class InputManager extends Phaser.Scene {
         this.keys.right.on('down', function(event) {
             localEE.emit("grid-right");
         });
-
     }
 
 }

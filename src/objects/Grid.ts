@@ -22,6 +22,7 @@ const INDEXES = [
 export class Grid {
     private size: integer;
     private tiles: Tile[][] = [[]];
+    private moved: boolean;
 
 
     constructor();
@@ -59,19 +60,22 @@ export class Grid {
         var horizontal = (dirY == 0);
         var positive = ((horizontal && dirX == 1) || (!horizontal && dirY == 1));
 
-        var moved = this.combineTiles(horizontal, positive);
+        this.moved = this.combineTiles(horizontal, positive);
 
         // add random tile after each move
-        if(moved) {
+        if(this.moved) {
             var random_value = Math.random() <= 0.9? 2 : 4;
             this.addRandomTile(random_value);
         }
     }
 
+
+    
+
     // horizontal = left & right, vertical = up & down
     // positive = right & down, negative = left & up
     combineTiles(horizontal: boolean, positive: boolean) {
-        var moved = false;
+        this.moved = false;
         for(var _i = 0; _i < this.size; ++_i) {
             var new_values = [];
             var old_values = [];
@@ -110,13 +114,13 @@ export class Grid {
                 var value = 0;
                 if(_x < new_values.length)
                     value = new_values[_x];
-                if(!moved && value != old_values[_x])
-                    moved = true;
+                if(!this.moved && value != old_values[_x])
+                    this.moved = true;
                 temp_tile.setValue(value);
                 _j += (positive)? -1 : 1;
             }
         }
-        return moved;
+        return this.moved;
     }
 
     getRandomAvailableTile() {
@@ -143,6 +147,10 @@ export class Grid {
         var randomTile = this.getRandomAvailableTile();
         if (randomTile != null)
             randomTile.setValue(value);
+    }
+
+    isMoved() {
+        return this.moved;
     }
 
     getSum(id: integer) {

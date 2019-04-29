@@ -4,6 +4,8 @@
     "module": "CommonJS",
     "sourceMap": true,
     "noImplicitAny": false,
-    "strict": false
+    "strict": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true  
   }
 }

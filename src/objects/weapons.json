@@ -1,0 +1,62 @@
+[
+    {
+        "name": "P2048 Pistol",
+        "ep":0,
+        "cost":0,
+        "multiplier":1,
+        "chamber": 
+            [{"row":0,"column":0}],
+        "center":  {"row":0,"column":0},
+        "mostLeftTop":  {"row":0,"column":0},
+        "mostRightBottom":  {"row":0,"column":0}
+    },
+    {
+        "name": "RZ75 Machine Pistol",
+        "ep":3,
+        "cost":4000,
+        "multiplier":1,
+        "chamber": [
+            {"row":0,"column":0},
+            {"row":0,"column":1},
+            {"row":0,"column":2}
+        ],
+        "center":{"row":0,"column":1},
+        "mostLeftTop":{"row":0,"column":0},
+        "mostRightBottom":{"row":0,"column":2}
+    },
+    {
+        "name": "SPAR3 Pump Shotgun",
+        "ep":5,
+        "cost":10000,
+        "multiplier":1,
+        "chamber": [
+            {"row":0,"column":0},
+            {"row":0,"column":2},
+            {"row":1,"column":1},
+            {"row":2,"column":0},
+            {"row":2,"column":2}
+        ],
+        "center":{"row":1,"column":1},
+        "mostLeftTop":{"row":0,"column":0},
+        "mostRightBottom":{"row":2,"column":2}
+    },
+    {
+        "name": "ARK97 Assault Rifle",
+        "ep":5,
+        "cost":22000,
+        "multiplier":1,
+        "chamber": [
+            {"row":0,"column":0},
+            {"row":0,"column":1},
+            {"row":1,"column":0},
+            {"row":1,"column":1},
+            {"row":1,"column":2},
+            {"row":2,"column":0},
+            {"row":2,"column":1},
+            {"row":2,"column":2}
+        ],
+        "center":{"row":1,"column":1},
+        "mostLeftTop":{"row":0,"column":0},
+        "mostRightBottom":{"row":2,"column":2}
+    }
+]

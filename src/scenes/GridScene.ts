@@ -1,6 +1,7 @@
 import { InputManager } from "../controller/InputManager";
 import { Input } from "phaser";
 import { Grid } from "../objects/Grid";
+import { Weapon, Point } from "../objects/Weapon";
 
 
 
@@ -41,32 +42,27 @@ export class GridScene extends Phaser.Scene {
             this.mainGrid_size,
             this.mainGrid_size);
         this.mainGridRectangle.setFillStyle(0x000000,0);
-        this.mainGridRectangle.setStrokeStyle(4,0xfafafa,1);
+        this.mainGridRectangle.setStrokeStyle(4,0xfafafa,0.2);
         this.input_ee.on("grid-up",this.onUpPressed,this);
         this.input_ee.on("grid-down",this.onDownPressed,this);
         this.input_ee.on("grid-left",this.onLeftPressed,this);
         this.input_ee.on("grid-right",this.onRightPressed,this);
-        console.log(this.input_ee.eventNames());
         this.generateGrid();
     }
 
     onUpPressed() {
-        console.log("up");
         this.grid.moveTiles(3);
         this.updateGrid();
     }
     onDownPressed() {
-        console.log("down");
         this.grid.moveTiles(1);
         this.updateGrid();
     }
     onLeftPressed() {
-        console.log("left");
         this.grid.moveTiles(0);
         this.updateGrid();
     }
     onRightPressed() {
-        console.log("right");
         this.grid.moveTiles(2);
         this.updateGrid();
     }
@@ -117,21 +113,48 @@ export class GridScene extends Phaser.Scene {
             for (let j = 0; j<this.SIZE; j++) {
                 var n = t[i][j].getValue();
                 this.cells[i].push(this.add.rectangle(
-                    i * this.cells_size + this.mainGrid_x,
-                    j * this.cells_size + this.mainGrid_y,
+                    i * this.cells_size + this.mainGridRectangle.getTopLeft().x,
+                    j * this.cells_size + this.mainGridRectangle.getTopLeft().y,
                     this.cells_size,
                     this.cells_size
-                ).setOrigin(2,2)
+                ).setOrigin(0,0)
                 .setStrokeStyle(4,0xfafafa,1)
                 .setFillStyle(this.getColorByValue(n),1));
                 
 
                 this.cellsCaption[i].push(this.add.text(
-                    i * this.cells_size + this.mainGrid_x,
-                    j * this.cells_size + this.mainGrid_y,
+                    i * this.cells_size + this.mainGridRectangle.getTopLeft().x,
+                    j * this.cells_size + this.mainGridRectangle.getTopLeft().y,
                     "" + n
-                ).setOrigin(5.76,3.1).setFontFamily('Arial').setColor('#ffffff').setScale(4).setDepth(1));
+                ).setOrigin(0,0)
+                .setFontFamily('Arial')
+                .setFontSize(40)
+                .setFontStyle("Bold")
+                .setColor("#ffffff")
+                .setDepth(1)
+                .setAlign('center'));
             }
+        }
+    }
+
+    loadWeapon(weapon:Weapon){
+        this.turnOnWeaponLoader(weapon); 
+    }
+
+    turnOnWeaponLoader(weapon:Weapon){ 
+        for (let i=0; i<this.SIZE; i++) {
+            for (let j=0; j<this.SIZE; j++) {
+                this.cells[i][j].on('pointerover',function(){
+                    console.log(i+" "+j);
+                });
+            }
+        }
+    }
+
+    highlight(weapon:Weapon) {
+        let chamber = weapon.getChamber;
+        for (let i=0; i<chamber.length; i++) {
+            this.cells[chamber[i].row][chamber[i].column].setAlpha(0.5);
         }
     }
 
