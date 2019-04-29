@@ -9,7 +9,7 @@ import { GridScene } from "./scenes/GridScene";
 
 
 const config: GameConfig = {
-    type: Phaser.AUTO, //PHASER RENDER METHOD (WebGL or Canvas)
+    type: Phaser.WEBGL, //PHASER RENDER METHOD (WebGL or Canvas)
     width: 1024,
     height: 1920,
     parent: 'game',

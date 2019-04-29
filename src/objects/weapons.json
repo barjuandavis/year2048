@@ -6,9 +6,9 @@
         "multiplier":1,
         "chamber": 
             [{"row":0,"column":0}],
-        "center":  {"row":0,"column":0},
-        "mostLeftTop":  {"row":0,"column":0},
-        "mostRightBottom":  {"row":0,"column":0}
+        "center": 0,
+        "mostLeftTop": 0,
+        "mostRightBottom": 0
     },
     {
         "name": "RZ75 Machine Pistol",
@@ -20,9 +20,9 @@
             {"row":0,"column":1},
             {"row":0,"column":2}
         ],
-        "center":{"row":0,"column":1},
-        "mostLeftTop":{"row":0,"column":0},
-        "mostRightBottom":{"row":0,"column":2}
+        "center":1,
+        "mostLeftTop":0,
+        "mostRightBottom":2
     },
     {
         "name": "SPAR3 Pump Shotgun",
@@ -36,9 +36,9 @@
             {"row":2,"column":0},
             {"row":2,"column":2}
         ],
-        "center":{"row":1,"column":1},
-        "mostLeftTop":{"row":0,"column":0},
-        "mostRightBottom":{"row":2,"column":2}
+        "center":2,
+        "mostLeftTop":0,
+        "mostRightBottom":4
     },
     {
         "name": "ARK97 Assault Rifle",
@@ -55,8 +55,8 @@
             {"row":2,"column":1},
             {"row":2,"column":2}
         ],
-        "center":{"row":1,"column":1},
-        "mostLeftTop":{"row":0,"column":0},
-        "mostRightBottom":{"row":2,"column":2}
+        "center":3,
+        "mostLeftTop":0,
+        "mostRightBottom":7
     }
 ]

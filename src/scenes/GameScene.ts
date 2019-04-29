@@ -1,6 +1,7 @@
 import { UIElements } from "./UIElements";
 import { Titan } from "../objects/Titan";
 import { Inventory } from "../objects/Inventory";
+import { Weapon } from "../objects/Weapon";
 
 
 export class GameScene extends Phaser.Scene {
@@ -24,15 +25,17 @@ export class GameScene extends Phaser.Scene {
 
     init(): void {
         this.playerName = "Some name here";
-        this.ee = new Phaser.Events.EventEmitter();
         this.inventory = new Inventory();
+        this.ee = new Phaser.Events.EventEmitter();
         this.currentStage = 0;
         this.currentGold = 0;
     }
     preload() {
         this.load.image('bg','./src/assets/bg/bg.png');
+        
     }
     create() {
+        
         this.background = this.add.image(-200,200,"bg")
         .setOrigin(0)
         .setScale(5);
@@ -68,4 +71,7 @@ export class GameScene extends Phaser.Scene {
         }
     }
 
+    getCurrentWeapon() {
+        return this.inventory.getActiveWeapon();   
+    }
 }

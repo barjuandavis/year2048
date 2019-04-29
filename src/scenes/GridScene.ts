@@ -2,6 +2,7 @@ import { InputManager } from "../controller/InputManager";
 import { Input } from "phaser";
 import { Grid } from "../objects/Grid";
 import { Weapon, Point } from "../objects/Weapon";
+import { GameScene } from "./GameScene";
 
 
 
@@ -9,15 +10,21 @@ export class GridScene extends Phaser.Scene {
 
     private input_ee: Phaser.Events.EventEmitter;
     private input_manager: InputManager;
+    private game_scene: GameScene;
     private grid: Grid;
     private mainGridRectangle: Phaser.GameObjects.Rectangle;
-    private cells: Phaser.GameObjects.Rectangle[][] = [[]];
-    private cellsCaption: Phaser.GameObjects.Text[][] = [[]];
-    private SIZE = 4;
+    private cells: Phaser.GameObjects.Rectangle[][] = [];
+    private highlighter: Phaser.GameObjects.Rectangle[][] = [];
+    private cellsCaption: Phaser.GameObjects.Text[][] = [];
+    public static SIZE = 4;
     private mainGrid_x = 512;
     private mainGrid_y = 1250;
     private mainGrid_size = 500;
     private cells_size = this.mainGrid_size/4;
+    private loading: boolean;
+    private highlightAnim: Phaser.Tweens.Timeline;
+    private weapon: Weapon;
+
          
     constructor() {
         super({
@@ -27,14 +34,16 @@ export class GridScene extends Phaser.Scene {
     }
 
     init() {
-        this.grid = new Grid(this.SIZE);
+        this.grid = new Grid(GridScene.SIZE);
     }
 
     preload() {
         this.input_manager = <InputManager> this.scene.get("InputManager");
+        this.game_scene = <GameScene> this.scene.get("GameScene");
     }    
 
     create() {  
+        this.loading = false;
         this.input_ee = this.input_manager.ee;
         this.mainGridRectangle = this.add.rectangle(
             this.mainGrid_x,
@@ -47,23 +56,29 @@ export class GridScene extends Phaser.Scene {
         this.input_ee.on("grid-down",this.onDownPressed,this);
         this.input_ee.on("grid-left",this.onLeftPressed,this);
         this.input_ee.on("grid-right",this.onRightPressed,this);
+        this.input_ee.on("eh-up",this.moveChamberUp,this);
+        this.input_ee.on("eh-right",this.moveChamberRight,this);
+        this.input_ee.on("eh-down",this.moveChamberDown,this);
+        this.input_ee.on("eh-left",this.moveChamberLeft,this);
+        this.input_ee.on("toggleLoadingWeapon", this.toggleLoadWeapon,this);
+        this.input_ee.on("fire",this.fireAtWill,this);
         this.generateGrid();
     }
 
     onUpPressed() {
-        this.grid.moveTiles(3);
-        this.updateGrid();
-    }
-    onDownPressed() {
-        this.grid.moveTiles(1);
-        this.updateGrid();
-    }
-    onLeftPressed() {
         this.grid.moveTiles(0);
         this.updateGrid();
     }
-    onRightPressed() {
+    onDownPressed() {
         this.grid.moveTiles(2);
+        this.updateGrid();
+    }
+    onLeftPressed() {
+        this.grid.moveTiles(3);
+        this.updateGrid();
+    }
+    onRightPressed() {
+        this.grid.moveTiles(1);
         this.updateGrid();
     }
 
@@ -92,8 +107,8 @@ export class GridScene extends Phaser.Scene {
     }
     updateGrid() {
         var t = this.grid.getTiles();
-        for (let i = 0; i<this.SIZE; i++) {
-            for (let j = 0; j<this.SIZE; j++) {
+        for (let i = 0; i<GridScene.SIZE; i++) {
+            for (let j = 0; j<GridScene.SIZE; j++) {
                 var n = t[i][j].getValue();
                 this.cells[i][j].setFillStyle(this.getColorByValue(n),1);
                 if (n == 0) {
@@ -105,26 +120,42 @@ export class GridScene extends Phaser.Scene {
         }
     }
 
+    clearHighligts() {
+        for (let i = 0; i<GridScene.SIZE; i++) {
+            for (let j = 0; j<GridScene.SIZE; j++) {
+                this.highlighter[i][j].setAlpha(0);
+            }
+        }
+    }
+
     generateGrid() {
         var t = this.grid.getTiles();
-        for (let i = 0; i<this.SIZE; i++) {
+        for (let i = 0; i<GridScene.SIZE; i++) {
             this.cells[i] = [];
+            this.highlighter[i] = [];
             this.cellsCaption[i] = [];
-            for (let j = 0; j<this.SIZE; j++) {
+            for (let j = 0; j<GridScene.SIZE; j++) {
                 var n = t[i][j].getValue();
-                this.cells[i].push(this.add.rectangle(
-                    i * this.cells_size + this.mainGridRectangle.getTopLeft().x,
-                    j * this.cells_size + this.mainGridRectangle.getTopLeft().y,
+                this.cells[i][j] = this.add.rectangle(
+                    j * this.cells_size + this.mainGridRectangle.getTopLeft().x,
+                    i * this.cells_size + this.mainGridRectangle.getTopLeft().y,
                     this.cells_size,
                     this.cells_size
                 ).setOrigin(0,0)
                 .setStrokeStyle(4,0xfafafa,1)
-                .setFillStyle(this.getColorByValue(n),1));
-                
-
-                this.cellsCaption[i].push(this.add.text(
-                    i * this.cells_size + this.mainGridRectangle.getTopLeft().x,
-                    j * this.cells_size + this.mainGridRectangle.getTopLeft().y,
+                .setFillStyle(this.getColorByValue(n),1);
+                this.highlighter[i][j] = this.add.rectangle(
+                    j * this.cells_size + this.mainGridRectangle.getTopLeft().x,
+                    i * this.cells_size + this.mainGridRectangle.getTopLeft().y,
+                    this.cells_size,
+                    this.cells_size
+                ).setOrigin(0,0)
+                .setStrokeStyle(4,0x00000,1)
+                .setFillStyle(0x00ff15,1)
+                .setAlpha(0);
+                this.cellsCaption[i][j] = this.add.text(
+                    j * this.cells_size + this.mainGridRectangle.getTopLeft().x,
+                    i * this.cells_size + this.mainGridRectangle.getTopLeft().y,
                     "" + n
                 ).setOrigin(0,0)
                 .setFontFamily('Arial')
@@ -132,32 +163,58 @@ export class GridScene extends Phaser.Scene {
                 .setFontStyle("Bold")
                 .setColor("#ffffff")
                 .setDepth(1)
-                .setAlign('center'));
+                .setAlign('center');
             }
         }
     }
 
-    loadWeapon(weapon:Weapon){
-        this.turnOnWeaponLoader(weapon); 
-    }
-
-    turnOnWeaponLoader(weapon:Weapon){ 
-        for (let i=0; i<this.SIZE; i++) {
-            for (let j=0; j<this.SIZE; j++) {
-                this.cells[i][j].on('pointerover',function(){
-                    console.log(i+" "+j);
-                });
-            }
+    toggleLoadWeapon() {
+        this.loading = !this.loading;
+        console.log('loading:'+this.loading);
+        if (this.loading) {
+            //highlight
+            this.highlight(this.game_scene.getCurrentWeapon());
+        }  else {
+            this.clearHighligts();
         }
     }
 
-    highlight(weapon:Weapon) {
-        let chamber = weapon.getChamber;
-        for (let i=0; i<chamber.length; i++) {
-            this.cells[chamber[i].row][chamber[i].column].setAlpha(0.5);
+
+    highlight(weapon: Weapon) {
+        var c = weapon.getChamber();
+        var points = c.getArrayOfTargets();
+        for (let i=0; i<points.length; i++) {
+            let r = points[i].row;
+            let c = points[i].column;
+            this.highlighter[r][c].setAlpha(0.3);
         }
     }
 
+    moveChamber(dir) {
+        let weapon = this.game_scene.getCurrentWeapon();
+        weapon.getChamber().move(dir);
+        this.clearHighligts();
+        this.highlight(weapon);
+    }
+
+    fire(weapon:Weapon) {
+        var t = this.grid.getTiles();
+        var c = weapon.getChamber();
+        var points = c.getArrayOfTargets();
+        let total = 0;
+        for (let i=0; i<points.length; i++) {
+            let r = points[i].row;
+            let c = points[i].column;
+            total += t[r][c].getValue() * weapon.getMultiplier();
+        }
+        this.game_scene.dealDamage(total);
+    }
+
+    fireAtWill() {this.fire(this.game_scene.getCurrentWeapon())}
+    moveChamberUp() {this.moveChamber(0);}
+    moveChamberRight() {this.moveChamber(1);}
+    moveChamberDown() {this.moveChamber(2);}
+    moveChamberLeft() {this.moveChamber(3);}
 }
 
 export namespace GridScene {
@@ -174,5 +231,6 @@ export namespace GridScene {
         Number_1024 = 0xba68c8,
         Number_2048 = 0x212121,
     }
-
 }
+
+

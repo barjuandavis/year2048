@@ -1,6 +1,7 @@
 import { GameScene } from "./GameScene";
 import { Loader } from "phaser";
 import { ImageButton } from "../objects/ImageButton";
+import { InputManager } from "../controller/InputManager";
 
 export class UIElements extends Phaser.Scene {
     //works by displaying whatever is passed from Game Scene
@@ -13,6 +14,8 @@ export class UIElements extends Phaser.Scene {
     private goldPlaceHolder: Phaser.GameObjects.Text;   
     private healthPlaceHolder: Phaser.GameObjects.Text;
     private gameObj: GameScene;
+    private inputManager: InputManager;
+    private key;
 
     constructor ()
     {
@@ -24,13 +27,22 @@ export class UIElements extends Phaser.Scene {
 
     init() {
         this.gameObj = <GameScene> this.scene.get("GameScene");
+        this.inputManager = <InputManager> this.scene.get("InputManager");
     }
 
     preload ()
     {
+        this.load.spritesheet({
+            key: 'loadss',
+            url: './src/assets/ui/load_button/loadButton100x68px.png',
+            frameConfig: {
+                frameWidth: 100,
+                frameHeight: 68,
+                startFrame: 0,
+                endFrame: 1
+                }
+             });
        this.load.image('load',"./src/assets/ui/load_button/0.png");
-       this.load.image('load_o',"./src/assets/ui/load_button/0.png");
-       this.load.image('load_out',"./src/assets/ui/load_button/0.png");
        this.load.image('load_d',"./src/assets/ui/load_button/1.png");
        this.load.image('shop',"./src/assets/ui/shop_button/0.png");
        this.load.image('shop_c',"./src/assets/ui/shop_button/1.png");
@@ -45,7 +57,8 @@ export class UIElements extends Phaser.Scene {
             2. Show button places
             3. 
         */
-        this.loadButton2 = new ImageButton(this,1024/2,1920-300,'load','load','load_c','load',this.onLoadButtonClicked).setScale(2);
+        this.loadButton2 = new ImageButton(this,1024/2,1920-300,'load','load','load_d',this.onLoadButtonClicked).setScale(2);
+        this.loadButton2.on('down',this.onLoadButtonClicked,this);
         this.shopButton = this.add.image(1024/2,1920-100,'shop').setScale(2);
         this.bossPlaceHolder = this.add.text(315,330,
             "Stage : " + this.gameObj.getStage()).setScale(2);
@@ -76,7 +89,29 @@ export class UIElements extends Phaser.Scene {
 
     onLoadButtonClicked() {
         console.log("HELLO!");
+        this.inputManager.onLoadButtonPressed();
+        
+       // this.key.up.enabled = false;
+        
+        
+        /**
+         * 1. Switch off 'grid-dir' emmiter
+         * 2. Turn on 'moveChamber-dir' emmiter
+         * 3. Handle those movements (up-down-left-right)
+         * 4. Make sure the chamber collides with the Energy Harvester Wall
+         * 5. Use enter button to fire, or load button to cancel
+         */
     }    
 
+
+    isLoading() {
+
+
+    }
+
+    setLoad() {
+
+
+    }
 
 }

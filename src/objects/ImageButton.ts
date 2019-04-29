@@ -4,13 +4,15 @@ export class ImageButton extends Phaser.GameObjects.Sprite {
     overFrame;
     myCallback;
     myScope;
+
  
-    constructor(_scene, _x, _y, _tex, _upFrame, _downFrame, _overFrame, _callback) {
-        super(_scene, _x, _y, _tex, _upFrame);
-       
+    constructor(_scene, _x, _y, _tex, _upFrame,_downFrame, _callback) {
+        super(_scene, _x, _y, _upFrame, );
+        
+        
         this.upFrame = _upFrame;
         this.downFrame = _downFrame;
-        this.overFrame = _overFrame;
+        this.overFrame = _upFrame;
         this.myCallback = _callback;
         this.myScope = _scene; // scope
  
@@ -32,7 +34,7 @@ export class ImageButton extends Phaser.GameObjects.Sprite {
  
     pointerDown(pointer) {
         this.setFrame(this.downFrame);
-        this.myCallback.call(this.myScope,'down');
+        //this.myCallback.call(this.myScope,'down');
     }
  
     pointerOver(pointer, x, y) {

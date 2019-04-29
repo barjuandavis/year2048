@@ -2,8 +2,10 @@ export class InputManager extends Phaser.Scene {
     /**
      * It's only a scene that layers the real InputManager :)
      */
-    private keys;
+    public keys;
     public ee: Phaser.Events.EventEmitter;
+    private loaded: boolean;
+
 
 
     constructor() {
@@ -19,7 +21,12 @@ export class InputManager extends Phaser.Scene {
             up: 'up',
             down: 'down',
             left: 'left',
-            right: 'right'
+            right: 'right',
+            W: 'W',
+            S: 'S',
+            A: 'A',
+            D: 'D',
+            fire: 'ENTER'
         });       
     }
 
@@ -49,4 +56,38 @@ export class InputManager extends Phaser.Scene {
         });
     }
 
+    onLoadButtonPressed() {
+        var localEE = this.ee;
+        this.loaded = !this.loaded;
+        if (this.loaded) {
+            localEE.emit("toggleLoadingWeapon");
+            this.keys.W.enabled = true;
+            this.keys.S.enabled = true;
+            this.keys.A.enabled = true;
+            this.keys.D.enabled = true;
+            this.keys.fire.enabled = true;
+            this.keys.W.on('down', function(event) {
+                localEE.emit("eh-up");
+            });
+            this.keys.S.on('down', function(event) {
+                localEE.emit("eh-down");
+            });
+            this.keys.A.on('down', function(event) {
+                localEE.emit("eh-left");
+            });
+            this.keys.D.on('down', function(event) {
+                localEE.emit("eh-right");
+            });
+            this.keys.fire.once('down', function(event) {
+                localEE.emit("fire");
+            });
+        } else {
+            localEE.emit("toggleLoadingWeapon");
+            this.keys.W.enabled = false;
+            this.keys.S.enabled = false;
+            this.keys.A.enabled = false;
+            this.keys.D.enabled = false;
+            this.keys.fire.enabled = false;
+        }
+    }
 }
