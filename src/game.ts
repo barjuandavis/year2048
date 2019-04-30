@@ -6,6 +6,7 @@ import { GameScene } from "./scenes/GameScene";
 import { GameObserver } from "./controller/GameObserver";
 import { InputManager } from "./controller/InputManager";
 import { GridScene } from "./scenes/GridScene";
+import { ShopScene } from "./scenes/ShopScene";
 
 
 const config: GameConfig = {
@@ -13,7 +14,7 @@ const config: GameConfig = {
     width: 1024,
     height: 1920,
     parent: 'game',
-    scene: [ GameScene, UIElements, InputManager, GameObserver, GridScene ],
+    scene: [ GameScene, UIElements, InputManager, GameObserver, GridScene, ShopScene ],
     input: {
         keyboard: true
       },

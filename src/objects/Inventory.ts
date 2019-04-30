@@ -15,7 +15,6 @@ export class Inventory {
     active: integer;
 
     constructor() {
-        
         for(let i = 0; i<4; i++){
             let s = data[i];
             this.weapons.push(new Weapon(s.name,s.ep,s.multiplier,s.chamber,
@@ -26,8 +25,7 @@ export class Inventory {
             if (i==0) this.owned.push(true);
             else this.owned.push(false);
         }
-
-        this.active = 3;
+        this.active = 0;
     }
 
     buyWeapon(index){
@@ -36,6 +34,30 @@ export class Inventory {
 
     getActiveWeapon() {
          return this.weapons[this.active];
+    }
+
+    setActiveWeapon(index: integer): boolean {
+        if (!this.owned[index]) return false;
+        else {
+            this.active = index;
+            return true;
+        }
+    }
+
+    reset() {
+        this.weapons = [];
+        for(let i = 0; i<4; i++){
+            let s = data[i];
+            this.weapons.push(new Weapon(s.name,s.ep,s.multiplier,s.chamber,
+                s.cost,
+                s.center,
+                s.mostLeftTop,
+                s.mostRightBottom));
+        }
+    }
+
+    printAllWeapons() {
+        for(let i = 0; i<4; i++) {console.log(this.weapons[i].getChamber());}
     }
 
 }

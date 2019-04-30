@@ -58,6 +58,7 @@ export class Chamber {
         this.mostRightBottomIndex = _rb;
     }
     reset() {
+        this.t = [];
         this.t = this.resetState;
     }
 
@@ -67,7 +68,7 @@ export class Chamber {
     getMostLeftTopIndex() {return this.mostLeftTopIndex;}
     getMostRightBottom():Point {return this.t[this.getMostRightBottomIndex()];}
     getMostRightBottomIndex() {return this.mostRightBottomIndex;}
-    getArrayOfTargets() {return this.t;}
+    getArrayOfTargets() {return this.resetState;}
     
 
     move(dir:integer): boolean { 

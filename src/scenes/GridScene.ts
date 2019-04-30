@@ -35,6 +35,7 @@ export class GridScene extends Phaser.Scene {
 
     init() {
         this.grid = new Grid(GridScene.SIZE);
+        this.loading = false;
     }
 
     preload() {
@@ -43,7 +44,7 @@ export class GridScene extends Phaser.Scene {
     }    
 
     create() {  
-        this.loading = false;
+        
         this.input_ee = this.input_manager.ee;
         this.mainGridRectangle = this.add.rectangle(
             this.mainGrid_x,
@@ -83,7 +84,7 @@ export class GridScene extends Phaser.Scene {
     }
 
     getColorByValue(val:number) {
-        var s;
+        let s;
         let colors = [
             GridScene.COLORS_BACKGROUND.Number_2,
             GridScene.COLORS_BACKGROUND.Number_4,
@@ -98,7 +99,7 @@ export class GridScene extends Phaser.Scene {
             GridScene.COLORS_BACKGROUND.Number_2048
         ];
         if (val == 0) return 0x000000;
-        var index = <integer> Math.log2(val);
+        let index = <integer> Math.log2(val);
         index = index - 1;
         
         if (index >= 11) index = 11;
@@ -106,10 +107,10 @@ export class GridScene extends Phaser.Scene {
         return s;
     }
     updateGrid() {
-        var t = this.grid.getTiles();
+        let t = this.grid.getTiles();
         for (let i = 0; i<GridScene.SIZE; i++) {
             for (let j = 0; j<GridScene.SIZE; j++) {
-                var n = t[i][j].getValue();
+                let n = t[i][j].getValue();
                 this.cells[i][j].setFillStyle(this.getColorByValue(n),1);
                 if (n == 0) {
                     this.cellsCaption[i][j].setText("");
@@ -129,20 +130,20 @@ export class GridScene extends Phaser.Scene {
     }
 
     generateGrid() {
-        var t = this.grid.getTiles();
+        let t = this.grid.getTiles();
         for (let i = 0; i<GridScene.SIZE; i++) {
             this.cells[i] = [];
             this.highlighter[i] = [];
             this.cellsCaption[i] = [];
             for (let j = 0; j<GridScene.SIZE; j++) {
-                var n = t[i][j].getValue();
+                let n = t[i][j].getValue();
                 this.cells[i][j] = this.add.rectangle(
                     j * this.cells_size + this.mainGridRectangle.getTopLeft().x,
                     i * this.cells_size + this.mainGridRectangle.getTopLeft().y,
                     this.cells_size,
                     this.cells_size
                 ).setOrigin(0,0)
-                .setStrokeStyle(4,0xfafafa,1)
+                .setStrokeStyle(4,0xfafafa,0.2)
                 .setFillStyle(this.getColorByValue(n),1);
                 this.highlighter[i][j] = this.add.rectangle(
                     j * this.cells_size + this.mainGridRectangle.getTopLeft().x,
@@ -169,20 +170,19 @@ export class GridScene extends Phaser.Scene {
     }
 
     toggleLoadWeapon() {
-        this.loading = !this.loading;
-        console.log('loading:'+this.loading);
-        if (this.loading) {
-            //highlight
-            this.highlight(this.game_scene.getCurrentWeapon());
-        }  else {
+        this.loading = !(this.loading);
+        if (!this.loading) {
             this.clearHighligts();
+        } else {
+            this.moveChamberUp();
+            this.moveChamberDown();
         }
     }
 
 
     highlight(weapon: Weapon) {
-        var c = weapon.getChamber();
-        var points = c.getArrayOfTargets();
+        let c = weapon.getChamber();
+        let points = c.getArrayOfTargets();
         for (let i=0; i<points.length; i++) {
             let r = points[i].row;
             let c = points[i].column;
@@ -197,17 +197,20 @@ export class GridScene extends Phaser.Scene {
         this.highlight(weapon);
     }
 
-    fire(weapon:Weapon) {
-        var t = this.grid.getTiles();
-        var c = weapon.getChamber();
-        var points = c.getArrayOfTargets();
+    fire(weapon:Weapon):void {
+        let t = this.grid.getTiles();
+        let c = weapon.getChamber();
+        let points = c.getArrayOfTargets();
         let total = 0;
         for (let i=0; i<points.length; i++) {
             let r = points[i].row;
             let c = points[i].column;
+            if (t[r][c].getValue() == 0) return;
             total += t[r][c].getValue() * weapon.getMultiplier();
         }
         this.game_scene.dealDamage(total);
+        for (let i=0; i<points.length; i++) this.remove(points[i].row,points[i].column);
+
     }
 
     fireAtWill() {this.fire(this.game_scene.getCurrentWeapon())}
@@ -215,6 +218,11 @@ export class GridScene extends Phaser.Scene {
     moveChamberRight() {this.moveChamber(1);}
     moveChamberDown() {this.moveChamber(2);}
     moveChamberLeft() {this.moveChamber(3);}
+    remove(row,column) {
+        this.grid.removeTile(row,column);
+        this.updateGrid();
+    }
+
 }
 
 export namespace GridScene {

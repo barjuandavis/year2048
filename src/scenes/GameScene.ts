@@ -13,6 +13,7 @@ export class GameScene extends Phaser.Scene {
     private background: Phaser.GameObjects.Image;
     private inventory: Inventory;
     public ee: Phaser.Events.EventEmitter;
+    public ep: integer;
 
 
 
@@ -29,13 +30,13 @@ export class GameScene extends Phaser.Scene {
         this.ee = new Phaser.Events.EventEmitter();
         this.currentStage = 0;
         this.currentGold = 0;
+        this.ep = 0;
     }
     preload() {
         this.load.image('bg','./src/assets/bg/bg.png');
         
     }
     create() {
-        
         this.background = this.add.image(-200,200,"bg")
         .setOrigin(0)
         .setScale(5);
@@ -66,6 +67,7 @@ export class GameScene extends Phaser.Scene {
     dealDamage(dmg: integer) : void {
         this.currentTitan.hit(dmg);
         this.ee.emit("hit");
+        this.inventory.reset();
         if(this.currentTitan.isDead()) {
             this.nextStage();
         }
@@ -73,5 +75,10 @@ export class GameScene extends Phaser.Scene {
 
     getCurrentWeapon() {
         return this.inventory.getActiveWeapon();   
+    }
+
+
+    getInventory() {
+        return this.inventory;
     }
 }

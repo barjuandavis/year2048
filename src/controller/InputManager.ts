@@ -27,7 +27,8 @@ export class InputManager extends Phaser.Scene {
             A: 'A',
             D: 'D',
             fire: 'ENTER'
-        });       
+        });
+        this.loaded = false;       
     }
 
     create():void {
@@ -58,14 +59,16 @@ export class InputManager extends Phaser.Scene {
 
     onLoadButtonPressed() {
         var localEE = this.ee;
-        this.loaded = !this.loaded;
-        if (this.loaded) {
+        this.loaded = !(this.loaded);
+        if (this.loaded == true) {
             localEE.emit("toggleLoadingWeapon");
+            console.log("toggled load.");
             this.keys.W.enabled = true;
             this.keys.S.enabled = true;
             this.keys.A.enabled = true;
             this.keys.D.enabled = true;
             this.keys.fire.enabled = true;
+            var k = this.keys;
             this.keys.W.on('down', function(event) {
                 localEE.emit("eh-up");
             });
@@ -78,15 +81,23 @@ export class InputManager extends Phaser.Scene {
             this.keys.D.on('down', function(event) {
                 localEE.emit("eh-right");
             });
+
+            var thisis = <InputManager> this.scene.get('InputManager');
             this.keys.fire.once('down', function(event) {
                 localEE.emit("fire");
+                thisis.onLoadButtonPressed();
             });
         } else {
+            console.log("untoggled load.");
             localEE.emit("toggleLoadingWeapon");
             this.keys.W.enabled = false;
             this.keys.S.enabled = false;
             this.keys.A.enabled = false;
             this.keys.D.enabled = false;
+            this.keys.W.off('down');
+            this.keys.S.off('down');
+            this.keys.A.off('down');
+            this.keys.D.off('down');
             this.keys.fire.enabled = false;
         }
     }

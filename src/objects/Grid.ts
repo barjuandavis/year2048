@@ -149,6 +149,10 @@ export class Grid {
             randomTile.setValue(value);
     }
 
+    removeTile(row, column) {
+        this.tiles[row][column].setValue(0);
+    }
+
     isMoved() {
         return this.moved;
     }
